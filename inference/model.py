@@ -25,6 +25,7 @@ class ModelArgs:
         max_batch_size (int): Maximum batch size.
         max_seq_len (int): Maximum sequence length.
         dtype (Literal["bf16", "fp8"]): Data type for computations.
+        scale_fmt (Optional[str]): Format for quantization scale.
         vocab_size (int): Vocabulary size.
         dim (int): Model dimension.
         inter_dim (int): Intermediate dimension for MLP layers.
@@ -54,6 +55,7 @@ class ModelArgs:
     max_batch_size: int = 8
     max_seq_len: int = 4096 * 4
     dtype: Literal["bf16", "fp8"] = "bf16"
+    scale_fmt: Optional[str] = None
     vocab_size: int = 102400
     dim: int = 2048
     inter_dim: int = 10944
@@ -126,7 +128,7 @@ class ParallelEmbedding(nn.Module):
         return y
 
 
-def linear(x: torch.Tensor, weight: torch.Tensor, bias: Optional[torch.Tensor] = None) -> torch.Tensor:
+def linear(x: torch.Tensor, weight: torch.Tensor, bias: Optional[torch.Tensor] = None, scale_fmt: Optional[str] = None) -> torch.Tensor:
     """
     Applies a linear transformation to the incoming data: y = xA^T + b.
     This function supports specialized implementations based on quantization
@@ -143,7 +145,7 @@ def linear(x: torch.Tensor, weight: torch.Tensor, bias: Optional[torch.Tensor] =
         quantization-aware computations depending on the input parameters.
 
     Notes:
-        - If `weight` is quantized (e.g., `element_size() > 1`), a dequantized version 
+        - If `weight` is quantized (e.g., `element_size() == 1`), a dequantized version 
           is used for computation.
         - If `gemm_impl == "bf16"`, dequantization and a `bf16` GEMM operation are applied.
         - For other cases, the function applies quantization to `x` and uses `fp8_gemm` for computation.
@@ -154,7 +156,7 @@ def linear(x: torch.Tensor, weight: torch.Tensor, bias: Optional[torch.Tensor] =
         weight = weight_dequant(weight, weight.scale)
         return F.linear(x, weight, bias)
     else:
-        x, scale = act_quant(x, block_size)
+        x, scale = act_quant(x, block_size, scale_fmt)
         y = fp8_gemm(x, scale, weight, weight.scale)
         if bias is not None:
             y += bias
@@ -172,6 +174,7 @@ class Linear(nn.Module):
         dtype (optional): Data type for the layer. Defaults to `torch.bfloat16`.
     """
     dtype = torch.bfloat16
+    scale_fmt: Optional[str] = None
 
     def __init__(self, in_features: int, out_features: int, bias: bool = False, dtype = None):
         super().__init__()
@@ -199,7 +202,7 @@ class Linear(nn.Module):
         Returns:
             torch.Tensor: Transformed tensor after linear computation.
         """
-        return linear(x, self.weight, self.bias)
+        return linear(x, self.weight, self.bias, self.scale_fmt)
 
 
 class ColumnParallelLinear(Linear):
@@ -392,7 +395,7 @@ def apply_rotary_emb(x: torch.Tensor, freqs_cis: torch.Tensor) -> torch.Tensor:
 
 class MLA(nn.Module):
     """
-    Multi-Headed Attention Layer (MLA).
+    Multi-Head Latent Attention (MLA) Layer.
 
     Attributes:
         dim (int): Dimensionality of the input features.
@@ -442,7 +445,7 @@ class MLA(nn.Module):
 
     def forward(self, x: torch.Tensor, start_pos: int, freqs_cis: torch.Tensor, mask: Optional[torch.Tensor]):
         """
-        Forward pass for the Multi-Headed Attention Layer (MLA).
+        Forward pass for the Multi-Head Latent Attention (MLA) Layer.
 
         Args:
             x (torch.Tensor): Input tensor of shape (batch_size, seq_len, dim).
@@ -558,7 +561,7 @@ class Gate(nn.Module):
         self.score_func = args.score_func
         self.route_scale = args.route_scale
         self.weight = nn.Parameter(torch.empty(args.n_routed_experts, args.dim))
-        self.bias = nn.Parameter(torch.empty(args.n_routed_experts)) if self.dim == 7168 else None
+        self.bias = nn.Parameter(torch.empty(args.n_routed_experts, dtype=torch.float32)) if self.dim == 7168 else None
 
     def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         """
@@ -585,8 +588,8 @@ class Gate(nn.Module):
             else:
                 group_scores = scores.topk(2, dim=-1)[0].sum(dim=-1)
             indices = group_scores.topk(self.topk_groups, dim=-1)[1]
-            mask = torch.zeros_like(scores[..., 0]).scatter_(1, indices, True)
-            scores = (scores * mask.unsqueeze(-1)).flatten(1)
+            mask = scores.new_ones(x.size(0), self.n_groups, dtype=bool).scatter_(1, indices, False)
+            scores = scores.masked_fill_(mask.unsqueeze(-1), float("-inf")).flatten(1)
         indices = torch.topk(scores, self.topk, dim=-1)[1]
         weights = original_scores.gather(1, indices)
         if self.score_func == "sigmoid":
@@ -755,6 +758,7 @@ class Transformer(nn.Module):
         world_size = dist.get_world_size() if dist.is_initialized() else 1
         rank = dist.get_rank() if dist.is_initialized() else 0
         Linear.dtype = torch.float8_e4m3fn if args.dtype == "fp8" else torch.bfloat16
+        Linear.scale_fmt = args.scale_fmt
         super().__init__()
         self.max_seq_len = args.max_seq_len
         self.embed = ParallelEmbedding(args.vocab_size, args.dim)

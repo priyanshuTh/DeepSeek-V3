@@ -7,42 +7,27 @@
 </div>
 <hr>
 <div align="center" style="line-height: 1;">
-  <a href="https://www.deepseek.com/" target="_blank" style="margin: 2px;">
-    <img alt="Homepage" src="https://github.com/deepseek-ai/DeepSeek-V2/blob/main/figures/badge.svg?raw=true" style="display: inline-block; vertical-align: middle;"/>
-  </a>
-  <a href="https://chat.deepseek.com/" target="_blank" style="margin: 2px;">
-    <img alt="Chat" src="https://img.shields.io/badge/🤖%20Chat-DeepSeek%20V3-536af5?color=536af5&logoColor=white" style="display: inline-block; vertical-align: middle;"/>
-  </a>
-  <a href="https://huggingface.co/deepseek-ai" target="_blank" style="margin: 2px;">
-    <img alt="Hugging Face" src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-DeepSeek%20AI-ffc107?color=ffc107&logoColor=white" style="display: inline-block; vertical-align: middle;"/>
-  </a>
+  <a href="https://www.deepseek.com/"><img alt="Homepage"
+    src="https://github.com/deepseek-ai/DeepSeek-V2/blob/main/figures/badge.svg?raw=true"/></a>
+  <a href="https://chat.deepseek.com/"><img alt="Chat"
+    src="https://img.shields.io/badge/🤖%20Chat-DeepSeek%20V3-536af5?color=536af5&logoColor=white"/></a>
+  <a href="https://huggingface.co/deepseek-ai"><img alt="Hugging Face"
+    src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-DeepSeek%20AI-ffc107?color=ffc107&logoColor=white"/></a>
+  <br>
+  <a href="https://discord.gg/Tc7c45Zzu5"><img alt="Discord"
+    src="https://img.shields.io/badge/Discord-DeepSeek%20AI-7289da?logo=discord&logoColor=white&color=7289da"/></a>
+  <a href="https://github.com/deepseek-ai/DeepSeek-V2/blob/main/figures/qr.jpeg?raw=true"><img alt="Wechat"
+    src="https://img.shields.io/badge/WeChat-DeepSeek%20AI-brightgreen?logo=wechat&logoColor=white"/></a>
+  <a href="https://twitter.com/deepseek_ai"><img alt="Twitter Follow"
+    src="https://img.shields.io/badge/Twitter-deepseek_ai-white?logo=x&logoColor=white"/></a>
+  <br>
+  <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-CODE"><img alt="Code License"
+    src="https://img.shields.io/badge/Code_License-MIT-f5de53?&color=f5de53"/></a>
+  <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-MODEL"><img alt="Model License"
+    src="https://img.shields.io/badge/Model_License-Model_Agreement-f5de53?&color=f5de53"/></a>
+  <br>
+  <a href="https://arxiv.org/pdf/2412.19437"><b>Paper Link</b>👁️</a>
 </div>
-
-<div align="center" style="line-height: 1;">
-  <a href="https://discord.gg/Tc7c45Zzu5" target="_blank" style="margin: 2px;">
-    <img alt="Discord" src="https://img.shields.io/badge/Discord-DeepSeek%20AI-7289da?logo=discord&logoColor=white&color=7289da" style="display: inline-block; vertical-align: middle;"/>
-  </a>
-  <a href="https://github.com/deepseek-ai/DeepSeek-V2/blob/main/figures/qr.jpeg?raw=true" target="_blank" style="margin: 2px;">
-    <img alt="Wechat" src="https://img.shields.io/badge/WeChat-DeepSeek%20AI-brightgreen?logo=wechat&logoColor=white" style="display: inline-block; vertical-align: middle;"/>
-  </a>
-  <a href="https://twitter.com/deepseek_ai" target="_blank" style="margin: 2px;">
-    <img alt="Twitter Follow" src="https://img.shields.io/badge/Twitter-deepseek_ai-white?logo=x&logoColor=white" style="display: inline-block; vertical-align: middle;"/>
-  </a>
-</div>
-
-<div align="center" style="line-height: 1;">
-  <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-CODE" style="margin: 2px;">
-    <img alt="Code License" src="https://img.shields.io/badge/Code_License-MIT-f5de53?&color=f5de53" style="display: inline-block; vertical-align: middle;"/>
-  </a>
-  <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-MODEL" style="margin: 2px;">
-    <img alt="Model License" src="https://img.shields.io/badge/Model_License-Model_Agreement-f5de53?&color=f5de53" style="display: inline-block; vertical-align: middle;"/>
-  </a>
-</div>
-
-
-<p align="center">
-  <a href="DeepSeek_V3.pdf"><b>Paper Link</b>👁️</a>
-</p>
 
 ## Table of Contents
 
@@ -248,8 +233,9 @@ DeepSeek-V3 can be deployed locally using the following hardware and open-source
 3. **LMDeploy**: Enables efficient FP8 and BF16 inference for local and cloud deployment.
 4. **TensorRT-LLM**: Currently supports BF16 inference and INT4/8 quantization, with FP8 support coming soon.
 5. **vLLM**: Support DeepSeek-V3 model with FP8 and BF16 modes for tensor parallelism and pipeline parallelism.
-6. **AMD GPU**: Enables running the DeepSeek-V3 model on AMD GPUs via SGLang in both BF16 and FP8 modes.
-7. **Huawei Ascend NPU**: Supports running DeepSeek-V3 on Huawei Ascend devices.
+6. **LightLLM**: Supports efficient single-node or multi-node deployment for FP8 and BF16.
+7. **AMD GPU**: Enables running the DeepSeek-V3 model on AMD GPUs via SGLang in both BF16 and FP8 modes.
+8. **Huawei Ascend NPU**: Supports running DeepSeek-V3 on Huawei Ascend devices in both INT8 and BF16.
 
 Since FP8 training is natively adopted in our framework, we only provide FP8 weights. If you require BF16 weights for experimentation, you can use the provided conversion script to perform the transformation.
 
@@ -336,18 +322,22 @@ For comprehensive step-by-step instructions on running DeepSeek-V3 with LMDeploy
 
 ### 6.4 Inference with TRT-LLM (recommended)
 
-[TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM) now supports the DeepSeek-V3 model, offering precision options such as BF16 and INT4/INT8 weight-only. Support for FP8 is currently in progress and will be released soon. You can access the custom branch of TRTLLM specifically for DeepSeek-V3 support through the following link to experience the new features directly: https://github.com/NVIDIA/TensorRT-LLM/tree/deepseek/examples/deepseek_v3. 
+[TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM) now supports the DeepSeek-V3 model, offering precision options such as BF16 and INT4/INT8 weight-only. Support for FP8 is currently in progress and will be released soon. You can access the custom branch of TRTLLM specifically for DeepSeek-V3 support through the following link to experience the new features directly: https://github.com/NVIDIA/TensorRT-LLM/tree/main/examples/deepseek_v3. 
 
 
 ### 6.5 Inference with vLLM (recommended)
 
 [vLLM](https://github.com/vllm-project/vllm) v0.6.6 supports DeepSeek-V3 inference for FP8 and BF16 modes on both NVIDIA and AMD GPUs. Aside from standard techniques, vLLM offers _pipeline parallelism_ allowing you to run this model on multiple machines connected by networks. For detailed guidance, please refer to the [vLLM instructions](https://docs.vllm.ai/en/latest/serving/distributed_serving.html). Please feel free to follow [the enhancement plan](https://github.com/vllm-project/vllm/issues/11539) as well.
 
-### 6.6 Recommended Inference Functionality with AMD GPUs
+### 6.6 Inference with LightLLM (recommended)
+
+[LightLLM](https://github.com/ModelTC/lightllm/tree/main) v1.0.1 supports single-machine and multi-machine tensor parallel deployment for DeepSeek-R1 (FP8/BF16) and provides mixed-precision deployment, with more quantization modes continuously integrated. For more details, please refer to [LightLLM instructions](https://lightllm-en.readthedocs.io/en/latest/getting_started/quickstart.html). Additionally, LightLLM offers PD-disaggregation deployment for DeepSeek-V2, and the implementation of PD-disaggregation for DeepSeek-V3 is in development.
+
+### 6.7 Recommended Inference Functionality with AMD GPUs
 
 In collaboration with the AMD team, we have achieved Day-One support for AMD GPUs using SGLang, with full compatibility for both FP8 and BF16 precision. For detailed guidance, please refer to the [SGLang instructions](#63-inference-with-lmdeploy-recommended).
 
-### 6.7 Recommended Inference Functionality with Huawei Ascend NPUs
+### 6.8 Recommended Inference Functionality with Huawei Ascend NPUs
 The [MindIE](https://www.hiascend.com/en/software/mindie) framework from the Huawei Ascend community has successfully adapted the BF16 version of DeepSeek-V3. For step-by-step guidance on Ascend NPUs, please follow the [instructions here](https://modelers.cn/models/MindIE/deepseekv3).
 
 
@@ -358,7 +348,7 @@ This code repository is licensed under [the MIT License](LICENSE-CODE). The use 
 ```
 @misc{deepseekai2024deepseekv3technicalreport,
       title={DeepSeek-V3 Technical Report}, 
-      author={DeepSeek-AI and Aixin Liu and Bei Feng and Bing Xue and Bingxuan Wang and Bochao Wu and Chengda Lu and Chenggang Zhao and Chengqi Deng and Chenyu Zhang and Chong Ruan and Damai Dai and Daya Guo and Dejian Yang and Deli Chen and Dongjie Ji and Erhang Li and Fangyun Lin and Fucong Dai and Fuli Luo and Guangbo Hao and Guanting Chen and Guowei Li and H. Zhang and Han Bao and Hanwei Xu and Haocheng Wang and Haowei Zhang and Honghui Ding and Huajian Xin and Huazuo Gao and Hui Li and Hui Qu and J. L. Cai and Jian Liang and Jianzhong Guo and Jiaqi Ni and Jiashi Li and Jiawei Wang and Jin Chen and Jingchang Chen and Jingyang Yuan and Junjie Qiu and Junlong Li and Junxiao Song and Kai Dong and Kai Hu and Kaige Gao and Kang Guan and Kexin Huang and Kuai Yu and Lean Wang and Lecong Zhang and Lei Xu and Leyi Xia and Liang Zhao and Litong Wang and Liyue Zhang and Meng Li and Miaojun Wang and Mingchuan Zhang and Minghua Zhang and Minghui Tang and Mingming Li and Ning Tian and Panpan Huang and Peiyi Wang and Peng Zhang and Qiancheng Wang and Qihao Zhu and Qinyu Chen and Qiushi Du and R. J. Chen and R. L. Jin and Ruiqi Ge and Ruisong Zhang and Ruizhe Pan and Runji Wang and Runxin Xu and Ruoyu Zhang and Ruyi Chen and S. S. Li and Shanghao Lu and Shangyan Zhou and Shanhuang Chen and Shaoqing Wu and Shengfeng Ye and Shengfeng Ye and Shirong Ma and Shiyu Wang and Shuang Zhou and Shuiping Yu and Shunfeng Zhou and Shuting Pan and T. Wang and Tao Yun and Tian Pei and Tianyu Sun and W. L. Xiao and Wangding Zeng and Wanjia Zhao and Wei An and Wen Liu and Wenfeng Liang and Wenjun Gao and Wenqin Yu and Wentao Zhang and X. Q. Li and Xiangyue Jin and Xianzu Wang and Xiao Bi and Xiaodong Liu and Xiaohan Wang and Xiaojin Shen and Xiaokang Chen and Xiaokang Zhang and Xiaosha Chen and Xiaotao Nie and Xiaowen Sun and Xiaoxiang Wang and Xin Cheng and Xin Liu and Xin Xie and Xingchao Liu and Xingkai Yu and Xinnan Song and Xinxia Shan and Xinyi Zhou and Xinyu Yang and Xinyuan Li and Xuecheng Su and Xuheng Lin and Y. K. Li and Y. Q. Wang and Y. X. Wei and Y. X. Zhu and Yang Zhang and Yanhong Xu and Yanhong Xu and Yanping Huang and Yao Li and Yao Zhao and Yaofeng Sun and Yaohui Li and Yaohui Wang and Yi Yu and Yi Zheng and Yichao Zhang and Yifan Shi and Yiliang Xiong and Ying He and Ying Tang and Yishi Piao and Yisong Wang and Yixuan Tan and Yiyang Ma and Yiyuan Liu and Yongqiang Guo and Yu Wu and Yuan Ou and Yuchen Zhu and Yuduan Wang and Yue Gong and Yuheng Zou and Yujia He and Yukun Zha and Yunfan Xiong and Yunxian Ma and Yuting Yan and Yuxiang Luo and Yuxiang You and Yuxuan Liu and Yuyang Zhou and Z. F. Wu and Z. Z. Ren and Zehui Ren and Zhangli Sha and Zhe Fu and Zhean Xu and Zhen Huang and Zhen Zhang and Zhenda Xie and Zhengyan Zhang and Zhewen Hao and Zhibin Gou and Zhicheng Ma and Zhigang Yan and Zhihong Shao and Zhipeng Xu and Zhiyu Wu and Zhongyu Zhang and Zhuoshu Li and Zihui Gu and Zijia Zhu and Zijun Liu and Zilin Li and Ziwei Xie and Ziyang Song and Ziyi Gao and Zizheng Pan},
+      author={DeepSeek-AI},
       year={2024},
       eprint={2412.19437},
       archivePrefix={arXiv},
